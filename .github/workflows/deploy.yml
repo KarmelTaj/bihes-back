@@ -1,0 +1,19 @@
+name: Deploy
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Pull and restart
+        run: |
+          set -e
+          cd /var/www/bihes-back
+          git pull origin develop
+          venv/bin/pip install -r requirements.txt
+          venv/bin/python manage.py migrate --noinput
+          venv/bin/python manage.py collectstatic --noinput
+          sudo systemctl restart gunicorn
