@@ -3,12 +3,16 @@ attrs==26.1.0
 Django==6.0.6
 django-filter==25.2
 djangorestframework==3.17.1
+djangorestframework-simplejwt==5.5.1
 drf-spectacular==0.29.0
 drf-spectacular-sidecar==2026.6.1
+factory-boy==3.3.3
+Faker==40.22.0
 inflection==0.5.1
 jsonschema==4.26.0
 jsonschema-specifications==2025.9.1
 psycopg==3.2.10
+PyJWT==2.13.0
 PyYAML==6.0.3
 referencing==0.37.0
 rpds-py==2026.5.1

@@ -34,19 +34,37 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
 
-    # Packages
+THIRD_PARTY_APPS = [
     "rest_framework",
+    "rest_framework_simplejwt",
+    "django_filters",
     "drf_spectacular",
     "drf_spectacular_sidecar",
 ]
+
+# Project apps live in the apps/ package; each AppConfig keeps its short
+# label ("accounts", "menu", ...) so migrations and AUTH_USER_MODEL are
+# unaffected by the directory layout.
+LOCAL_APPS = [
+    "apps.accounts",
+    "apps.menu",
+    "apps.orders",
+]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+# Custom user model with a role field (admin / customer). Set before the first
+# migration so the swappable user model is wired in cleanly.
+AUTH_USER_MODEL = "accounts.User"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
