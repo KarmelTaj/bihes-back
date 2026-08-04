@@ -8,16 +8,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-A virtualenv lives at `./venv/`. Use it for all commands:
+A virtualenv lives at `./.venv/`. Use it for all commands:
 
 ```bash
-./venv/bin/pip install -r requirements.txt   # install dependencies
-./venv/bin/python manage.py runserver        # dev server
-./venv/bin/python manage.py makemigrations   # create migrations
-./venv/bin/python manage.py migrate          # apply migrations
-./venv/bin/python manage.py test             # run Django tests
-./venv/bin/python manage.py test apps.accounts  # run tests for one app
+./.venv/bin/pip install -r requirements.txt   # install dependencies
+./.venv/bin/python manage.py runserver        # dev server
+./.venv/bin/python manage.py makemigrations   # create migrations
+./.venv/bin/python manage.py migrate          # apply migrations
+./.venv/bin/python manage.py seed_demo        # demo users + menu for local dev
+./.venv/bin/python manage.py test             # run Django tests
+./.venv/bin/python manage.py test apps.accounts  # run tests for one app
 ```
+
+`seed_demo` (in `apps/menu/management/commands/`) is idempotent and creates an
+`admin` and a `customer` account, both with password `demo12345`, plus a small
+menu — enough for the React frontend to render against a fresh database.
 
 There is no linting config, Makefile, or Docker setup.
 
@@ -38,8 +43,8 @@ When adding a new setting, put it in the matching module; environment-specific v
 
 Three domain apps live under the `apps/` package (registered as `LOCAL_APPS` in `core/settings/base.py`; each AppConfig sets `name = "apps.<app>"` with `label = "<app>"` so app labels, migrations, and `AUTH_USER_MODEL` keep the short name). Imports use the full path (`from apps.accounts...`). They are wired in `core/urls.py` (prefixes: `/accounts/auth/`, `/menu/`, `/orders/`):
 
-- **accounts** — custom `User` (AbstractUser + `role`: ADMIN/CUSTOMER), JWT login via simplejwt (`RoleTokenObtainPairSerializer` embeds role + username in token claims), self-registration always creates CUSTOMER role.
-- **menu** — `Category` → `MenuItem` (FK). ModelViewSets via DefaultRouter; read for authenticated users, write for admins.
+- **accounts** — custom `User` (AbstractUser + `role`: ADMIN/CUSTOMER), JWT login via simplejwt (`RoleTokenObtainPairSerializer` embeds role + username in token claims, and accepts an email in the `username` field by resolving it to its owner). Self-registration always creates CUSTOMER role and rejects an email already in use, so that email→username lookup stays unambiguous.
+- **menu** — `Category` → `MenuItem` (FK). ModelViewSets via DefaultRouter; **reads are public** (the storefront lists the menu before login), writes are admin-only.
 - **orders** — `Order` → `OrderItem`. `OrderItem.unit_price` snapshots `MenuItem.price` at order time, so totals are stable if menu prices change. Order creation validates item availability and runs in an atomic transaction. No delete action. Customers only see their own orders (`get_queryset` filters by user); admins see all. Status changes go through the admin-only `PATCH /orders/{id}/status/` action with a dedicated serializer.
 
 ### Cross-cutting conventions

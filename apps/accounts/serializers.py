@@ -40,9 +40,36 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ("id", "username", "email", "password", "first_name", "last_name")
         read_only_fields = ("id",)
 
+    def validate_email(self, email):
+        """Reject an email already in use.
+
+        ``AbstractUser.email`` is not unique at the database level, but login
+        accepts an email as the identifier (see
+        ``RoleTokenObtainPairSerializer``), so a duplicate would make the
+        lookup ambiguous. Enforcing it here keeps that resolution well defined.
+        """
+        if email and User.objects.filter(email__iexact=email).exists():
+            raise serializers.ValidationError("A user with this email already exists.")
+        return email
+
 
 class RoleTokenObtainPairSerializer(TokenObtainPairSerializer):
-    """JWT login that embeds ``role`` and ``username`` in the token claims."""
+    """JWT login that embeds ``role`` and ``username`` in the token claims.
+
+    The identifier field accepts either a username or an email address: the
+    frontend login form asks for one input, so an email is resolved to its
+    owner's username before simplejwt checks the credentials.
+    """
+
+    def validate(self, attrs):
+        identifier = attrs.get(self.username_field) or ""
+        if "@" in identifier:
+            owner = (
+                User.objects.filter(email__iexact=identifier).order_by("pk").first()
+            )
+            if owner is not None:
+                attrs[self.username_field] = owner.get_username()
+        return super().validate(attrs)
 
     @classmethod
     def get_token(cls, user):

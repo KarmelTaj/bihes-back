@@ -14,18 +14,18 @@ class IsAdminRole(BasePermission):
 
 
 class IsAdminOrReadOnly(BasePermission):
-    """Read access for any authenticated user; writes for admins only.
+    """Public read access; writes for admins only.
 
-    Used on the menu endpoints: customers browse, admins manage.
+    Used on the menu endpoints: the storefront lists categories and items to
+    anonymous visitors (the frontend home page renders the menu before login),
+    while creating and editing them stays admin-only.
     """
 
     def has_permission(self, request, view):
-        user = request.user
-        if not (user and user.is_authenticated):
-            return False
         if request.method in SAFE_METHODS:
             return True
-        return user.is_admin_role
+        user = request.user
+        return bool(user and user.is_authenticated and user.is_admin_role)
 
 
 class IsOwnerOrAdmin(BasePermission):
