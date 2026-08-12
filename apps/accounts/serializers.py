@@ -28,11 +28,8 @@ class RegisterSerializer(serializers.ModelSerializer):
     the model; the actual user creation happens in ``services.user_register``.
     """
 
-    # password = serializers.CharField(
-    #     write_only=True, validators=[validate_password], style={"input_type": "password"}
-    # )
     password = serializers.CharField(
-        write_only=True, validators=[], style={"input_type": "password"}
+        write_only=True, validators=[validate_password], style={"input_type": "password"}
     )
 
     class Meta:
