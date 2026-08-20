@@ -17,10 +17,21 @@ class OrderItemReadSerializer(serializers.ModelSerializer):
     subtotal = serializers.DecimalField(
         max_digits=10, decimal_places=2, read_only=True
     )
+    menu_item_image_url = serializers.URLField(
+        source="menu_item.image_url", read_only=True
+    )
 
     class Meta:
         model = OrderItem
-        fields = ("id", "menu_item", "menu_item_name", "quantity", "unit_price", "subtotal")
+        fields = (
+            "id",
+            "menu_item",
+            "menu_item_name",
+            "menu_item_image_url",
+            "quantity",
+            "unit_price",
+            "subtotal",
+        )
 
 
 class OrderItemWriteSerializer(serializers.Serializer):
