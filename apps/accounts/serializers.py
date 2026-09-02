@@ -15,9 +15,11 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     """Public-facing representation of a user."""
 
+    is_admin = serializers.BooleanField(source="is_admin_role", read_only=True)
+
     class Meta:
         model = User
-        fields = ("id", "username", "email", "first_name", "last_name", "role")
+        fields = ("id", "username", "email", "first_name", "last_name", "role", "is_admin")
         read_only_fields = ("id", "role")
 
 
