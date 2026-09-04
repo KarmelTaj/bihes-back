@@ -106,3 +106,7 @@ dmypy.json
 
 # Ruff
 .ruff_cache/
+
+
+#ai
+/pizza_ai/checkpoints/flan_t5_pizza

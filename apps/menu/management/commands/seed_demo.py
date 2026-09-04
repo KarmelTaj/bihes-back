@@ -40,32 +40,32 @@ DEMO_USERS = [
 
 # (category name, category description, [(item name, description, price)])
 DEMO_MENU = [
-    (
-        "Coffee",
-        "Espresso-based drinks, pulled to order.",
-        [
-            ("Royal Latte", "Smooth espresso with steamed milk", "4.99"),
-            ("Mocha Delight", "Rich chocolate with espresso", "5.49"),
-            ("Flat White", "Double ristretto under velvet microfoam", "4.59"),
-            ("Cold Brew", "Steeped eighteen hours, served over ice", "4.25"),
-        ],
-    ),
-    (
-        "Pastry",
-        "Baked in-house every morning.",
-        [
-            ("Butter Croissant", "Flaky, buttery and perfectly baked", "3.49"),
-            ("Almond Danish", "Toasted almonds over frangipane", "3.95"),
-        ],
-    ),
-    (
-        "Dessert",
-        "Something sweet to finish.",
-        [
-            ("Chocolate Cake", "Decadent chocolate indulgence", "5.99"),
-            ("Tiramisu", "Mascarpone, espresso and cocoa", "6.25"),
-        ],
-    ),
+    # (
+    #     "Coffee",
+    #     "Espresso-based drinks, pulled to order.",
+    #     [
+    #         ("Royal Latte", "Smooth espresso with steamed milk", "4.99"),
+    #         ("Mocha Delight", "Rich chocolate with espresso", "5.49"),
+    #         ("Flat White", "Double ristretto under velvet microfoam", "4.59"),
+    #         ("Cold Brew", "Steeped eighteen hours, served over ice", "4.25"),
+    #     ],
+    # ),
+    # (
+    #     "Pastry",
+    #     "Baked in-house every morning.",
+    #     [
+    #         ("Butter Croissant", "Flaky, buttery and perfectly baked", "3.49"),
+    #         ("Almond Danish", "Toasted almonds over frangipane", "3.95"),
+    #     ],
+    # ),
+    # (
+    #     "Dessert",
+    #     "Something sweet to finish.",
+    #     [
+    #         ("Chocolate Cake", "Decadent chocolate indulgence", "5.99"),
+    #         ("Tiramisu", "Mascarpone, espresso and cocoa", "6.25"),
+    #     ],
+    # ),
 ]
 
 

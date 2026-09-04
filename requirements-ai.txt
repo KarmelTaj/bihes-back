@@ -1,0 +1,5 @@
+# Optional runtime dependencies for pizza_project inference.
+# Install these in addition to requirements.txt when you add the trained checkpoint.
+torch
+transformers
+sentencepiece
