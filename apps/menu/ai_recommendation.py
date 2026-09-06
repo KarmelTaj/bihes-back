@@ -188,6 +188,15 @@ def tokens_from_exr(expression: str) -> list[dict[str, str]]:
 # ---------------------------------------------------------------------------
 
 
+MODEL_STATUSES = (
+    "not_run",              # tokens were supplied, so no inference was needed
+    "ready",                # the checkpoint loaded and produced an expression
+    "checkpoint_missing",   # no config.json at the configured model path
+    "dependencies_missing", # torch/transformers are not installed
+    "model_error",          # the checkpoint failed to load or generate
+)
+
+
 class PizzaModelService:
     """Load the user's FLAN-T5 checkpoint only when the endpoint is called."""
 

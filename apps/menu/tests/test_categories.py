@@ -60,7 +60,16 @@ class CategoryApiTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Category.objects.filter(pk=category_id).exists())
 
-    def test_anonymous_is_rejected(self):
+    def test_anonymous_can_browse_but_not_write(self):
+        """Menu reads are public (the storefront renders them before login),
+        while writes stay admin-only."""
         response = self.client.get(self.list_url)
 
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        names = [category["name"] for category in response.data["results"]]
+        self.assertIn("Pizza", names)
+
+        response = self.client.post(self.list_url, {"name": "Drinks"})
+
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertFalse(Category.objects.filter(name="Drinks").exists())

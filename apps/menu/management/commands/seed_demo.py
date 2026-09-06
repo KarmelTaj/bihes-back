@@ -1,8 +1,10 @@
 """Populate a fresh database with enough data to exercise the API locally.
 
-Creates two accounts (one admin, one customer) and a small menu, so the
-frontend has something to render against a brand-new ``db.sqlite3``. Safe to
-re-run: every object is looked up before it is created.
+Creates two accounts (one admin, one customer), a small menu, and the dining
+room's tables, so the frontend has something to render against a brand-new
+``db.sqlite3``. Tables are rows rather than a setting, so without this step a
+fresh database has nothing to book. Safe to re-run: every object is looked up
+before it is created.
 
     ./.venv/bin/python manage.py seed_demo
 """
@@ -16,10 +18,12 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from apps.menu.models import Category, MenuItem
+from apps.reservations.models import Table
 
 User = get_user_model()
 
 DEMO_PASSWORD = "demo12345"
+DEMO_TABLE_COUNT = 10
 
 DEMO_USERS = [
     {
@@ -86,6 +90,10 @@ class Command(BaseCommand):
                 )
             else:
                 self.stdout.write(f"  = user {user.username} already exists")
+
+        for number in range(1, DEMO_TABLE_COUNT + 1):
+            _, created = Table.objects.get_or_create(number=number)
+            self.stdout.write(f"  {'+' if created else '='} table {number}")
 
         for name, description, items in DEMO_MENU:
             category, created = Category.objects.get_or_create(

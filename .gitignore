@@ -46,6 +46,7 @@ cover/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+CLAUDE.md
 
 # Django migrations (uncomment if you don't want to track them)
 # */migrations/*.py

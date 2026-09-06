@@ -31,4 +31,5 @@ urlpatterns = [
     path('accounts/auth/', include('apps.accounts.urls')),
     path('menu/', include('apps.menu.urls')),
     path('orders/', include('apps.orders.urls')),
+    path('reservations/', include('apps.reservations.urls')),
 ]
